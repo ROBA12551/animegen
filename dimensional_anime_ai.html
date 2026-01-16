@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeGen Pro - AI Anime Icon Generator</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="AnimeGen Pro - Create stunning anime icons with AI. Professional quality. Completely free!">
+    <meta name="keywords" content="anime generator, AI art, icon generator, anime creator, アニメ生成">
+    <meta property="og:title" content="AnimeGen Pro - AI Anime Icon Generator">
+    <meta property="og:description" content="Create beautiful anime icons with AI - Free, unlimited, 1-4 simultaneous generation">
+    <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect fill='%23667eea' width='1200' height='630'/%3E%3C/svg%3E">
+    <meta property="og:url" content="https://animegen.app">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AnimeGen Pro - AI Anime Icon Generator">
+    <meta name="twitter:description" content="Create beautiful anime icons with AI - Free, unlimited, 1-4 simultaneous generation">
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AnimeGen Pro",
+        "description": "AI Anime Icon Generator",
+        "url": "https://animegen.app",
+        "applicationCategory": "GraphicsApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "JPY",
+            "description": "Completely free anime icon generation"
+        }
+    }
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #ff69b4;
+            --dark: #1a1a1a;
+            --darker: #ffffff;
+            --light: #f5f5f5;
+            --text: #333;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: var(--dark);
+            background-image: url('images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 26, 26, 0.7);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--darker);
+            border-bottom: 1px solid #ddd;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            color: var(--primary);
+            font-weight: 600;
+            margin: 0;
+            flex: 1;
+            text-align: center;
+        }
+
+        .header a {
+            color: var(--primary);
+            background: rgba(102, 126, 234, 0.1);
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .header a:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.6);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--light);
+        }
+
+        .chatbox {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.user .content {
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+            padding: 12px 16px;
+            max-width: 70%;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+
+        .message.assistant .content {
+            background: #e8e8e8;
+            color: var(--text);
+            border-radius: 12px;
+            padding: 12px 16px;
+            max-width: 70%;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+
+        .image-container {
+            max-width: 70%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 8px 0;
+        }
+
+        .image-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+        }
+
+        .download-btn {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-weight: 600;
+        }
+
+        .image-item:hover .download-btn {
+            opacity: 1;
+        }
+
+        .download-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Input Area */
+        .input-area {
+            background: var(--light);
+            border-top: 1px solid #ddd;
+            padding: 16px;
+        }
+
+        .input-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .control-group label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            background: white;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-group label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .adult-warning {
+            font-size: 11px;
+            color: #ff6b6b;
+            margin-left: 8px;
+            font-weight: 600;
+        }
+
+        /* Input Box */
+        .input-box {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        #chatInput {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: none;
+            max-height: 100px;
+            color: var(--text);
+        }
+
+        #chatInput:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+
+        .generate-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            white-space: nowrap;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .generate-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .chat-area {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .chat-area {
+                width: 100%;
+                border-right: none;
+            }
+
+            .message.user .content,
+            .message.assistant .content {
+                max-width: 100%;
+            }
+
+            .image-container {
+                max-width: 100%;
+            }
+
+            .input-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Scrollbar */
+        .chatbox::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chatbox::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+
+        .chatbox::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+
+        .chatbox::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>AnimeGen Pro - AI Anime Icon Generator</h1>
+            <a href="policy.html">Policy</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+            <!-- Chat Area -->
+            <div class="chat-area">
+                <div class="chatbox" id="chatbox"></div>
+
+                <!-- Input Controls -->
+                <div class="input-area">
+                    <div class="input-controls">
+                        <div class="control-group">
+                            <label for="generateCount">Images:</label>
+                            <select id="generateCount">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="aspectRatio">Size:</label>
+                            <select id="aspectRatio">
+                                <option value="1:1">1:1 Square (Icon)</option>
+                            </select>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="adultContent" />
+                            <label for="adultContent">18+ Adult Content</label>
+                            <span class="adult-warning" id="adultWarning" style="display: none;">18+ Only</span>
+                        </div>
+                    </div>
+
+                    <!-- Input Box -->
+                    <div class="input-box">
+                        <textarea 
+                            id="chatInput" 
+                            placeholder="Describe your anime icon..."
+                            rows="2"
+                        ></textarea>
+                        <button id="generateButton" class="generate-btn">
+                            <span class="spinner" id="generateSpinner" style="display: none;"></span>
+                            <span id="generateText">Generate</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language detection and prompt enhancement
+        const LANGUAGE_PROMPTS = {
+            'ja': 'アニメスタイル、高品質、専門的',
+            'zh': '动画风格，高品质，专业',
+            'ko': '애니메이션 스타일, 고품질, 전문적',
+            'ru': 'Стиль аниме, высокое качество, профессиональный',
+            'ar': 'أسلوب الأنمي، جودة عالية، احترافي',
+            'es': 'Estilo anime, alta calidad, profesional',
+            'fr': 'Style anime, haute qualité, professionnel',
+            'de': 'Anime-Stil, hohe Qualität, professionell',
+            'en': 'Anime style, high quality, professional'
+        };
+
+        const ADULT_PROMPTS = {
+            'ja': 'セクシー、官能的、成人向け、裸、ヌード、エロティック',
+            'zh': '性感、诱人、成人内容、裸体、色情',
+            'ko': '섹시한, 관능적인, 성인용, 나체, 누드, 에로틱',
+            'ru': 'сексуальный, чувственный, взрослый, обнаженный, эротический',
+            'ar': 'مثير، حسي، للبالغين، عاري، إباحي',
+            'es': 'sexy, sensual, contenido para adultos, desnudo, erótico',
+            'fr': 'sexy, sensuel, contenu pour adultes, nu, érotique',
+            'de': 'sexy, sinnlich, Inhalte für Erwachsene, nackt, erotisch',
+            'en': 'sexy, sensual, adult content, nude, naked, erotic, nsfw'
+        };
+
+        // Detect user language
+        function detectLanguage() {
+            const lang = navigator.language || navigator.userLanguage;
+            const baseLang = lang.split('-')[0].toLowerCase();
+            return baseLang;
+        }
+
+        function enhancePrompt(basePrompt, isAdult) {
+            const lang = detectLanguage();
+            
+            if (isAdult) {
+                const adultPrefix = ADULT_PROMPTS[lang] || ADULT_PROMPTS['en'];
+                return `${basePrompt}, ${adultPrefix}, anime style, detailed, 4k quality, nsfw, explicit`;
+            }
+            
+            const languagePrefix = LANGUAGE_PROMPTS[lang] || LANGUAGE_PROMPTS['en'];
+            return `${basePrompt}, ${languagePrefix}, anime style, detailed, 4k quality`;
+        }
+
+        // DOM Elements
+        const chatbox = document.getElementById('chatbox');
+        const chatInput = document.getElementById('chatInput');
+        const generateButton = document.getElementById('generateButton');
+        const generateCount = document.getElementById('generateCount');
+        const generateSpinner = document.getElementById('generateSpinner');
+        const generateText = document.getElementById('generateText');
+        const aspectRatio = document.getElementById('aspectRatio');
+        const adultContent = document.getElementById('adultContent');
+        const adultWarning = document.getElementById('adultWarning');
+
+        // Adult content warning toggle
+        adultContent.addEventListener('change', () => {
+            if (adultContent.checked) {
+                adultWarning.style.display = 'inline-block';
+            } else {
+                adultWarning.style.display = 'none';
+            }
+        });
+
+        // Download helper function
+        async function downloadImage(imageUrl, filename) {
+            try {
+                const response = await fetch(imageUrl);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename || 'animegen-' + Date.now() + '.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Download error:', error);
+                // Fallback: try direct download
+                const a = document.createElement('a');
+                a.href = imageUrl;
+                a.download = filename || 'animegen-' + Date.now() + '.png';
+                a.click();
+            }
+        }
+
+        // Display message
+        function displayMessage(text, isUser = false, imageUrl = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
+
+            if (imageUrl && (imageUrl.startsWith('http') || imageUrl.startsWith('data:'))) {
+                // Image message
+                const imagesDiv = document.createElement('div');
+                imagesDiv.className = 'image-container';
+                
+                const imgDiv = document.createElement('div');
+                imgDiv.className = 'image-item';
+                
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.onerror = () => {
+                    imgDiv.innerHTML = '<div style="color: #999; font-size: 12px; padding: 20px;">Failed to load image</div>';
+                };
+                
+                const downloadBtn = document.createElement('button');
+                downloadBtn.className = 'download-btn';
+                downloadBtn.textContent = 'Download';
+                downloadBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    downloadImage(imageUrl, 'animegen-' + Date.now() + '.png');
+                };
+                
+                imgDiv.appendChild(img);
+                imgDiv.appendChild(downloadBtn);
+                imagesDiv.appendChild(imgDiv);
+                messageDiv.appendChild(imagesDiv);
+            } else if (text) {
+                // Text message
+                const content = document.createElement('div');
+                content.className = 'content';
+                content.textContent = text;
+                messageDiv.appendChild(content);
+            }
+
+            chatbox.appendChild(messageDiv);
+            chatbox.scrollTop = chatbox.scrollHeight;
+            return messageDiv;
+        }
+
+        // Call Image Generation API with timeout
+        async function callImageGenerationApi(prompt, ratio, isAdult) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60秒タイムアウト
+
+            try {
+                // BuildPicoapps API を使用
+                const apiUrl = 'https://backend.buildpicoapps.com/aero/run/image-generation-api?pk=v1-Z0FBQUFBQm5HUEtMSjJkakVjcF9IQ0M0VFhRQ0FmSnNDSHNYTlJSblE0UXo1Q3RBcjFPcl9YYy1OZUhteDZWekxHdWRLM1M1alNZTkJMWEhNOWd4S1NPSDBTWC12M0U2UGc9PQ==';
+                
+                // アスペクト比を含める
+                const aspectRatioParam = ratio ? `, ${ratio} aspect ratio` : '';
+                const finalPrompt = prompt + aspectRatioParam;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        prompt: finalPrompt,
+                        isAdult: isAdult
+                    }),
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error(`API returned status ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('API Response:', data);
+
+                // BuildPicoapps APIのレスポンス形式に対応
+                if (data && (data.status === 'success' || data.text)) {
+                    const imageUrl = data.text || data.image || data.image_url || data.imageUrl || data.url;
+                    
+                    if (!imageUrl) {
+                        throw new Error('No image URL in response: ' + JSON.stringify(data));
+                    }
+
+                    return {
+                        status: 'success',
+                        imageUrl: imageUrl,
+                        message: 'Image generated successfully'
+                    };
+                } else {
+                    throw new Error('Unexpected API response format: ' + JSON.stringify(data));
+                }
+            } catch (error) {
+                clearTimeout(timeoutId);
+                if (error.name === 'AbortError') {
+                    throw new Error('Request timeout - API took too long to respond');
+                }
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        // Generate button click
+        generateButton.addEventListener('click', async () => {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            const numImages = parseInt(generateCount.value);
+            const isAdult = adultContent.checked;
+
+            // Display user message
+            displayMessage(message, true);
+            chatInput.value = '';
+
+            // Show loading state
+            generateButton.disabled = true;
+            generateSpinner.style.display = 'inline-block';
+            generateText.textContent = 'Generating';
+
+            try {
+                const enhancedPrompt = enhancePrompt(message, isAdult);
+                const ratio = aspectRatio.value;
+
+                displayMessage(`Generating ${numImages} icon(s) (1:1 square)...`, false);
+
+                // Generate images
+                const promises = [];
+                for (let i = 0; i < numImages; i++) {
+                    promises.push(callImageGenerationApi(enhancedPrompt, ratio, isAdult));
+                }
+
+                const results = await Promise.allSettled(promises);
+
+                let successCount = 0;
+
+                for (let i = 0; i < results.length; i++) {
+                    const result = results[i];
+
+                    if (result.status === 'fulfilled') {
+                        try {
+                            const imageUrl = result.value && result.value.imageUrl;
+                            
+                            // Check if it's a valid image URL
+                            if (imageUrl && (imageUrl.startsWith('http') || imageUrl.startsWith('data:'))) {
+                                displayMessage('', false, imageUrl);
+                                successCount++;
+                            } else {
+                                console.warn(`Invalid image URL at index ${i}:`, imageUrl);
+                                displayMessage(`Icon ${i + 1}: Invalid image URL received`, false);
+                            }
+                        } catch (e) {
+                            console.error(`Error processing result ${i}:`, e);
+                            displayMessage(`Icon ${i + 1}: Error processing response`, false);
+                        }
+                    } else if (result.status === 'rejected') {
+                        console.error(`Generation ${i + 1} failed:`, result.reason);
+                        displayMessage(`Icon ${i + 1}: ${result.reason.message || 'Unknown error'}`, false);
+                    }
+                }
+
+                if (successCount > 0) {
+                    displayMessage(`Successfully generated ${successCount} icon(s)!`, false);
+                } else {
+                    displayMessage('Failed to generate icons. Please check the console for details and try again.', false);
+                }
+
+            } catch (error) {
+                console.error('Generate Error:', error);
+                displayMessage(`Error: ${error.message || 'Unknown error occurred'}`, false);
+            } finally {
+                generateButton.disabled = false;
+                generateSpinner.style.display = 'none';
+                generateText.textContent = 'Generate';
+            }
+        });
+
+        // Enter key to send
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                generateButton.click();
+            }
+        });
+
+        // Initial welcome message
+        displayMessage('Welcome to AnimeGen Pro Icon Generator! Describe your anime icon and I\'ll generate square 1:1 icons for you. You can generate 1-4 icons at once. Completely free!', false);
+    </script>
+</body>
+</html>

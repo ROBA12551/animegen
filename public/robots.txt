@@ -1,0 +1,31 @@
+# robots.txt for AnimeGen
+# Google, Bing, and other search engines
+
+User-agent: *
+Allow: /
+Disallow: /.netlify/
+Disallow: /api/
+Disallow: /.env*
+Disallow: /node_modules/
+
+# Specific rules for crawlers
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Block bad bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+# Sitemap location
+Sitemap: https://animegen.app/sitemap.xml

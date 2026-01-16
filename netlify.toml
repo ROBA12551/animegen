@@ -1,0 +1,25 @@
+[build]
+  command = "npm run build"
+  functions = "netlify/functions"
+  publish = "."
+
+[dev]
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/dimensional_anime_ai.html"
+  status = 200
+
+# Environment variables configuration
+# Set these in Netlify dashboard:
+# - REPLICATE_API_KEY
+# - STRIPE_SECRET_KEY
+# - STRIPE_PREMIUM_PRICE_ID
+# - STRIPE_WEBHOOK_SECRET
+# - SITE_URL

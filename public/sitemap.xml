@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0">
+    
+    <!-- Main Page -->
+    <url>
+        <loc>https://animegen.app</loc>
+        <lastmod>2025-01-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://animegen.app/og-image.png</image:loc>
+            <image:title>AnimeGen - AI Anime Image Generator</image:title>
+        </image:image>
+        <mobile:mobile/>
+    </url>
+    
+    <!-- Features Page (Virtual) -->
+    <url>
+        <loc>https://animegen.app/#features</loc>
+        <lastmod>2025-01-16</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Pricing Page -->
+    <url>
+        <loc>https://animegen.app/#pricing</loc>
+        <lastmod>2025-01-16</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Gumroad Product Page (External) -->
+    <url>
+        <loc>https://gumroad.com/l/animegen-premium</loc>
+        <lastmod>2025-01-16</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+</urlset>
